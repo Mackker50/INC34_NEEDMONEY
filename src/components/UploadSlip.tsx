@@ -25,32 +25,30 @@ const UploadSlip: React.FC = () => {
     }, [file]);
 
     const handleUpload = async () => {
-      if (!file) {
+    if (!file) {
         setMessage('Please upload a file.');
         return;
-      }
-    
-      const formData = new FormData();
-      formData.append('slip', file);
-    
-      try {
-        const response = await fetch('/api/upload-slip', {
-          method: 'POST',
-          body: formData,
+    }
+
+    const formData = new FormData();
+    formData.append('slip', file);
+
+    try {
+        const response = await fetch('http://localhost:3001/api/upload-slip', {
+        method: 'POST',
+        body: formData,
         });
-    
-        console.log('Status:', response.status);
-        console.log('Response text:', await response.text());
-    
+
         if (response.ok) {
-          setMessage('File uploaded successfully!');
+        const data = await response.json();
+        setMessage('File uploaded successfully!');
+        setPreviewUrl(`http://localhost:3001${data.fileUrl}`);
         } else {
-          setMessage(`Failed to upload file. Status: ${response.status}`);
+        setMessage('Failed to upload file. Please try again.');
         }
-      } catch (err) {
-        console.error(err);
+    } catch {
         setMessage('An error occurred while uploading the file.');
-      }
+    }
     };
 
     const triggerFileInput = () => {
@@ -84,11 +82,11 @@ const UploadSlip: React.FC = () => {
 
                 {/* Hidden native input */}
                 <input
-                ref={fileInputRef}
-                type="file"
-                accept=".jpg,.jpeg,.png,.pdf"
-                onChange={handleFileChange}
-                className="hidden"
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={handleFileChange}
+                    className="hidden"
                 />
 
                 {/* Buttons container */}
