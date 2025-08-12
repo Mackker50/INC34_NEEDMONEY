@@ -34,7 +34,7 @@ const UploadSlip: React.FC = () => {
     formData.append('slip', file);
 
     try {
-        const response = await fetch('http://localhost:3001/api/upload-slip', {
+        const response = await fetch('inc34needmoney-production.up.railway.app/api/upload-slip', {
         method: 'POST',
         body: formData,
         });
