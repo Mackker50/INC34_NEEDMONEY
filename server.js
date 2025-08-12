@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Enable CORS for all origins
+// Enable CORS for all origins (you can restrict later if needed)
 app.use(cors());
 
 // Serve static files from the 'uploads' folder
@@ -23,19 +23,24 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// POST endpoint to receive uploaded slip
+// POST endpoint for file uploads
 app.post('/api/upload-slip', upload.single('slip'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded.' });
   }
+
   console.log('Uploaded file:', req.file);
 
-  // Use req.protocol and req.get('host') to build the correct URL dynamically
-  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  // Detect environment to set correct file URL
+  const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+    : `http://localhost:${PORT}`;
+
+  const fileUrl = `${baseUrl}/uploads/${req.file.filename}`;
   res.json({ message: 'File uploaded successfully!', fileUrl });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
