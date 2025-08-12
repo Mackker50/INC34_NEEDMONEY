@@ -25,28 +25,32 @@ const UploadSlip: React.FC = () => {
     }, [file]);
 
     const handleUpload = async () => {
-        if (!file) {
+      if (!file) {
         setMessage('Please upload a file.');
         return;
-        }
-
-        const formData = new FormData();
-        formData.append('slip', file);
-
-        try {
+      }
+    
+      const formData = new FormData();
+      formData.append('slip', file);
+    
+      try {
         const response = await fetch('/api/upload-slip', {
-            method: 'POST',
-            body: formData,
+          method: 'POST',
+          body: formData,
         });
-
+    
+        console.log('Status:', response.status);
+        console.log('Response text:', await response.text());
+    
         if (response.ok) {
-            setMessage('File uploaded successfully!');
+          setMessage('File uploaded successfully!');
         } else {
-            setMessage('Failed to upload file. Please try again.');
+          setMessage(`Failed to upload file. Status: ${response.status}`);
         }
-        } catch {
+      } catch (err) {
+        console.error(err);
         setMessage('An error occurred while uploading the file.');
-        }
+      }
     };
 
     const triggerFileInput = () => {
