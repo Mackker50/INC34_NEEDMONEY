@@ -34,22 +34,21 @@ const UploadSlip: React.FC = () => {
     formData.append('slip', file);
 
     try {
-        const response = await fetch('inc34needmoney-production.up.railway.app/api/upload-slip', {
-        method: 'POST',
-        body: formData,
+        const response = await fetch('https://inc34needmoney-production.up.railway.app/api/upload-slip', {
+            method: 'POST',
+            body: formData,
         });
 
         if (response.ok) {
-        const data = await response.json();
-        setMessage('File uploaded successfully!');
-        setPreviewUrl(`http://localhost:3001${data.fileUrl}`);
+            const data = await response.json();
+            setMessage('File uploaded successfully!');
+            setPreviewUrl(`https://inc34needmoney-production.up.railway.app${data.fileUrl}`);
         } else {
-        setMessage('Failed to upload file. Please try again.');
+            setMessage('Failed to upload file. Please try again.');
         }
     } catch {
         setMessage('An error occurred while uploading the file.');
     }
-    };
 
     const triggerFileInput = () => {
         fileInputRef.current?.click();

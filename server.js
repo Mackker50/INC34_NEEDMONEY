@@ -28,17 +28,12 @@ app.post('/api/upload-slip', upload.single('slip'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded.' });
   }
-
   console.log('Uploaded file:', req.file);
 
-  // Detect environment to set correct file URL
-  const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
-    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-    : `http://localhost:${PORT}`;
-
-  const fileUrl = `${baseUrl}/uploads/${req.file.filename}`;
+  const fileUrl = `https://inc34needmoney-production.up.railway.app/uploads/${req.file.filename}`;
   res.json({ message: 'File uploaded successfully!', fileUrl });
 });
+// GET endpoint to check server status
 
 // Start server
 app.listen(PORT, () => {
